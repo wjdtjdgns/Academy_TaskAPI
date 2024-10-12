@@ -1,10 +1,8 @@
 package com.nhnacademy.miniDooray.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,4 +21,8 @@ public class TaskTag {
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
+
+    @NotNull
+    @Setter
+    private boolean isSelected = false;
 }
