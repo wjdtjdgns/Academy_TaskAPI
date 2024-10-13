@@ -1,11 +1,15 @@
 package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.CommentDto;
+import com.nhnacademy.miniDooray.dto.CommentRegisterDto;
 import com.nhnacademy.miniDooray.entity.Comment;
+import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.Task;
 import com.nhnacademy.miniDooray.exception.IdAlreadyExistsException;
 import com.nhnacademy.miniDooray.exception.IdNotFoundException;
+import com.nhnacademy.miniDooray.exception.ProjectNotFoundException;
 import com.nhnacademy.miniDooray.repository.CommentRepository;
+import com.nhnacademy.miniDooray.repository.ProjectRepository;
 import com.nhnacademy.miniDooray.repository.TaskRepository;
 import com.nhnacademy.miniDooray.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -21,22 +25,24 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
 
     @Override
-    public CommentDto registerComment(Long projectId,Long taskId, CommentDto commentDto) {
-        if(Objects.isNull(commentDto)){
-            throw new IllegalStateException();
+    public CommentDto registerComment(String userId, Long projectId, Long taskId, CommentRegisterDto commentDto) {
+        if (userId == null || projectId == null || taskId == null || commentDto == null) {
+            throw new IllegalArgumentException("Parameters cannot be null");
         }
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
         Task task = taskRepository.findByProjectIdAndId(projectId, taskId)
                 .orElseThrow(() -> new IdNotFoundException("업무 또는 프로젝트가 존재하지 않습니다."));
 
-        Comment comment = new Comment(
-                null,
-                task,
-                commentDto.getMemberId(),
-                commentDto.getContent()
-        );
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getContent());
+        comment.setMemberId(userId);
+        comment.setTask(task);
 
         commentRepository.save(comment);
         return convertToDto(comment);

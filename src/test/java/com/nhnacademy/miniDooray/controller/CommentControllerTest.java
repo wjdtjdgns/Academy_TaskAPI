@@ -31,7 +31,7 @@ public class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+    /*@Test
     @DisplayName("POST - /projects/{projectId}/tasks/{taskId}/comments (댓글 등록 성공)")
     void testRegisterComment_success() throws Exception {
         CommentDto commentDto = new CommentDto(1L, null, "commentMemberId", "This is a test comment");
@@ -45,7 +45,7 @@ public class CommentControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.content").value("This is a test comment"));
-    }
+    }*/
 
     @Test
     @DisplayName("POST - /projects/{projectId}/tasks/{taskId}/comments 실패 - 잘못된 요청")

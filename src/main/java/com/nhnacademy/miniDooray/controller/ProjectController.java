@@ -188,7 +188,7 @@ public class ProjectController {
     public ResponseEntity<MilestoneDto> addMilestone(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody MilestoneDto milestoneDto) {
+            @RequestBody MilestoneRegisterDto milestoneDto) {
         MilestoneDto createdMilestone = milestoneService.addMilestoneToProject(userId, projectId, milestoneDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMilestone);
     }
