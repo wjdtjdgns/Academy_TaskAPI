@@ -1,7 +1,6 @@
 package com.nhnacademy.miniDooray.controller;
 
 import com.nhnacademy.miniDooray.dto.CommentDto;
-import com.nhnacademy.miniDooray.entity.*;
 import com.nhnacademy.miniDooray.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;

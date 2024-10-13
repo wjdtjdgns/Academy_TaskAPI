@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto registerTask(TaskDto taskDto) {
         if (taskDto == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("TaskDto cannot be null");
         }
 
         if (taskRepository.existsById(taskDto.getId())) {
@@ -54,7 +54,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto updateTask(Long taskId, TaskDto taskDto) {
         if (taskId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Task ID cannot be null");
+        }
+        if (taskDto == null) {
+            throw new IllegalArgumentException("TaskDto cannot be null");
         }
 
         Task task = taskRepository.findById(taskId)
@@ -84,7 +87,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long taskId) {
         if (taskId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Task ID cannot be null");
         }
 
         Task task = taskRepository.findById(taskId)
@@ -96,7 +99,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<TaskDto> getTasks(int page, int size) {
         if (page < 0 || size < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Page and size must be non-negative");
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -108,7 +111,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto getTask(Long taskId) {
         if (taskId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Task ID cannot be null");
         }
 
         Task task = taskRepository.findById(taskId)
@@ -120,26 +123,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto updateMilestone(Long taskId, Long milestoneId, MilestoneDto milestoneDto) {
         if (taskId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Task ID cannot be null");
+        }
+        if (milestoneId == null) {
+            throw new IllegalArgumentException("Milestone ID cannot be null");
+        }
+        if (milestoneDto == null) {
+            throw new IllegalArgumentException("MilestoneDto cannot be null");
         }
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IdNotFoundException("해당 ID가 없습니다."));
 
-        if (milestoneId == null) {
-            throw new IllegalArgumentException();
-        }
-
-        milestoneRepository.findById(milestoneId)
+        Milestone milestone = milestoneRepository.findById(milestoneId)
                 .orElseThrow(() -> new IdNotFoundException("해당 ID가 없습니다."));
-
-        Milestone milestone = new Milestone(
-                milestoneId,
-                milestoneDto.getProject(),
-                milestoneDto.getTitle(),
-                milestoneDto.getStartDate(),
-                milestoneDto.getEndDate()
-        );
 
         task.setMilestone(milestone);
 
@@ -151,7 +148,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskTagDto updateTag(Long taskTagId, TaskDto taskDto, TagDto tagDto) {
         if (taskTagId == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("TaskTag ID cannot be null");
+        }
+        if (taskDto == null) {
+            throw new IllegalArgumentException("TaskDto cannot be null");
+        }
+        if (tagDto == null) {
+            throw new IllegalArgumentException("TagDto cannot be null");
         }
 
         TaskTag taskTag = taskTagRepository.findById(taskTagId)
