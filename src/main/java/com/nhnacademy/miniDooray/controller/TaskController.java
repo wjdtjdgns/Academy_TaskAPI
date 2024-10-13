@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/projects/{projectId}/task")
+@RequestMapping("/projects/{projectId}/tasks")
 @RequiredArgsConstructor
 @RestController
 public class TaskController {
