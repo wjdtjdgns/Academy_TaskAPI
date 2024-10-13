@@ -14,4 +14,5 @@ public interface TaskService {
     TaskDto updateMilestone(Long taskId, Long milestoneId, MilestoneDto milestoneDto);
     TaskTagDto updateTag(Long taskTagId, TaskDto taskDto, TagDto tagDto);
     List<TaskDto> getTasksByProjectId(Long projectId);
+    List<TaskTagResponse> registerTags(String userId, Long projectId, Long taskId, TaskTagRequest taskTagRequest);
 }

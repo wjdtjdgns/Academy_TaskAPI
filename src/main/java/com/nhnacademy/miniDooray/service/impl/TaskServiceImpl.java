@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -195,6 +196,27 @@ public class TaskServiceImpl implements TaskService {
 
         List<Task> tasks = taskRepository.findAllByProjectId(projectId);
         return tasks.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public List<TaskTagResponse> registerTags(String userId, Long projectId, Long taskId, TaskTagRequest taskTagRequest) {
+        taskRepository.findByProjectIdAndId(projectId, taskId)
+                .orElseThrow(() -> new IdNotFoundException("존재하지 않습니다."));
+
+        List<TaskTagResponse> responseList = new ArrayList<>();
+
+        for (Long tagId : taskTagRequest.getTagIds()) {
+            TaskTag taskTag = taskTagRepository.findByTaskIdAndTagId(taskId, tagId)
+                    .orElseThrow(() -> new IdNotFoundException("존재하지 않습니다."));
+
+            taskTag.setSelected(true);
+
+            taskTagRepository.save(taskTag);
+
+            responseList.add(new TaskTagResponse(taskTag.getId(), true));
+        }
+
+        return responseList;
     }
 
     private TaskDto convertToDto(Task task) {

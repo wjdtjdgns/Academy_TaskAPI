@@ -152,4 +152,20 @@ public class TaskController {
         TaskTagDto updatedTaskTag = taskService.updateTag(taskTagId, taskDto, tagDto);
         return ResponseEntity.ok(updatedTaskTag);
     }
+
+    @Operation(summary = "태스크에 태그 추가", description = "프로젝트 내 특정 태스크에 태그를 추가합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "태그가 성공적으로 추가되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다. (예: 유효하지 않은 태그 ID)"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 프로젝트 또는 태스크 아이디입니다."),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.")
+    })
+    @PostMapping("/{taskId}")
+    public ResponseEntity<List<TaskTagResponse>> registerTag(@RequestHeader("X-USER-ID") String userId,
+                                        @PathVariable Long projectId,
+                                        @PathVariable Long taskId,
+                                        @RequestBody TaskTagRequest taskTagRequest) {
+        List<TaskTagResponse> responseList = taskService.registerTags(userId, projectId, taskId, taskTagRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseList);
+    }
 }
