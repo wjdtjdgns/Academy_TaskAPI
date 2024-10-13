@@ -62,7 +62,7 @@ class ProjectControllerTest {
     @DisplayName("POST - /projects (프로젝트 생성)")
     void testCreateProject() throws Exception {
         ProjectDto projectDto = new ProjectDto(1L, "adminId", "ProjectName", Status.ACTIVATED, List.of());
-        when(projectService.createProject(anyString(), any(ProjectDto.class))).thenReturn(projectDto);
+        when(projectService.createProject(anyString(), any(ProjectRegisterDto.class))).thenReturn(projectDto);
 
         mockMvc.perform(post("/projects")
                         .header("X-USER-ID", "adminId")
