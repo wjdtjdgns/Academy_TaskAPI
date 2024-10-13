@@ -9,11 +9,13 @@ import com.nhnacademy.miniDooray.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<ProjectDto> createProject(
             @RequestHeader("X-USER-ID") String adminId,
-            @RequestBody ProjectDto projectDto) {
+            @Validated @RequestBody ProjectDto projectDto) {
         ProjectDto createdProject = projectService.createProject(adminId, projectDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
     }
@@ -68,7 +70,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> addProjectMembers(
             @RequestHeader("X-USER-ID") String adminId,
             @PathVariable Long projectId,
-            @RequestBody List<String> memberIds) {
+            @Validated @RequestBody List<String> memberIds) {
         ProjectDto project = projectService.addMembersToProject(adminId, projectId, memberIds);
         return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
@@ -99,7 +101,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> updateProject(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody ProjectDto updatedProject) {
+            @Validated @RequestBody ProjectDto updatedProject) {
         ProjectDto project = projectService.updateProject(userId, projectId, updatedProject);
         return ResponseEntity.ok(project);
     }
@@ -115,7 +117,7 @@ public class ProjectController {
     public ResponseEntity<TagDto> addTag(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody TagDto tagDto) {
+            @Validated @RequestBody TagDto tagDto) {
         TagDto createdTag = tagService.addTagToProject(userId, projectId, tagDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTag);
     }
@@ -146,7 +148,7 @@ public class ProjectController {
     public ResponseEntity<TagDto> updateTag(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody TagDto tagDto) {
+            @Validated @RequestBody TagDto tagDto) {
         TagDto updatedTag = tagService.updateProjectTag(userId, projectId, tagDto);
         return ResponseEntity.ok(updatedTag);
     }
@@ -178,7 +180,7 @@ public class ProjectController {
     public ResponseEntity<MilestoneDto> addMilestone(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody MilestoneDto milestoneDto) {
+            @Validated @RequestBody MilestoneDto milestoneDto) {
         MilestoneDto createdMilestone = milestoneService.addMilestoneToProject(userId, projectId, milestoneDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMilestone);
     }
@@ -209,7 +211,7 @@ public class ProjectController {
     public ResponseEntity<MilestoneDto> updateMilestone(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody MilestoneDto milestoneDto) {
+            @Validated @RequestBody MilestoneDto milestoneDto) {
         MilestoneDto updatedMilestone = milestoneService.updateMilestone(userId, projectId, milestoneDto);
         return ResponseEntity.ok(updatedMilestone);
     }
