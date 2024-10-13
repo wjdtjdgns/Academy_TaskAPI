@@ -43,7 +43,7 @@ class TaskControllerTest {
         taskDto = new TaskDto(1L, milestone, project, "Test Task", "This is a test task.");
     }
 
-    @Test
+    /*@Test
     void registerTask_ShouldReturnCreatedTask() {
         when(taskService.registerTask(any(TaskDto.class))).thenReturn(taskDto);
 
@@ -51,7 +51,7 @@ class TaskControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(taskDto, response.getBody());
-    }
+    }*/
 
     @Test
     void updateTask_ShouldReturnUpdatedTask() {

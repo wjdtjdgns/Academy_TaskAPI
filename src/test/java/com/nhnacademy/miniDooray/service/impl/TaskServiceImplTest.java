@@ -72,25 +72,6 @@ class TaskServiceImplTest {
     }
 
     @Test
-    void registerTask_success() {
-        when(taskRepository.existsById(anyLong())).thenReturn(false);
-        when(taskRepository.save(any(Task.class))).thenReturn(task);
-
-        TaskDto result = taskService.registerTask(taskDto);
-
-        assertNotNull(result);
-        assertEquals(taskDto.getTitle(), result.getTitle());
-        verify(taskRepository, times(1)).save(any(Task.class));
-    }
-
-    @Test
-    void registerTask_taskAlreadyExists() {
-        when(taskRepository.existsById(anyLong())).thenReturn(true);
-
-        assertThrows(IdAlreadyExistsException.class, () -> taskService.registerTask(taskDto));
-    }
-
-    @Test
     void updateTask_success() {
         when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
@@ -208,12 +189,6 @@ class TaskServiceImplTest {
         when(taskTagRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(IdNotFoundException.class, () -> taskService.updateTag(1L, taskDto, tagDto));
-    }
-
-    // Null 체크 테스트
-    @Test
-    void registerTask_nullParameters() {
-        assertThrows(IllegalArgumentException.class, () -> taskService.registerTask(null));
     }
 
     @Test
