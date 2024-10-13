@@ -1,9 +1,6 @@
 package com.nhnacademy.miniDooray.controller;
 
-import com.nhnacademy.miniDooray.dto.MilestoneDto;
-import com.nhnacademy.miniDooray.dto.TagDto;
-import com.nhnacademy.miniDooray.dto.TaskDto;
-import com.nhnacademy.miniDooray.dto.TaskTagDto;
+import com.nhnacademy.miniDooray.dto.*;
 import com.nhnacademy.miniDooray.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,17 +24,17 @@ public class TaskController {
 
     @Operation(summary = "프로젝트 내 태스크 추가")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Task successfully created"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "404", description = "Project not found")
+            @ApiResponse(responseCode = "201", description = "태스크가 성공적으로 등록되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다. (예: 유효하지 않은 프로젝트 ID)"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 프로젝트 아이디입니다."),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.")
     })
     @PostMapping
     public ResponseEntity<TaskDto> registerTask(
             @RequestHeader("X-USER-ID") String userId,
-            @Validated @RequestBody TaskDto taskDto) {
-        TaskDto createdTask = taskService.registerTask(taskDto);
+            @PathVariable Long projectId,
+            @Validated @RequestBody TaskRegisterDto taskDto) {
+        TaskDto createdTask = taskService.registerTask(userId, projectId, taskDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 

@@ -77,8 +77,8 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> addProjectMembers(
             @RequestHeader("X-USER-ID") String adminId,
             @PathVariable Long projectId,
-            @RequestBody List<String> memberIds) {
-        ProjectDto project = projectService.addMembersToProject(adminId, projectId, memberIds);
+            @RequestBody MemberRequest memberRequest) {
+        ProjectDto project = projectService.addMembersToProject(adminId, projectId, memberRequest.getMemberIds());
         return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
@@ -97,7 +97,6 @@ public class ProjectController {
         return ResponseEntity.ok().body(project);
     }
 
-    //TODO : 변경 중
     // 5. 프로젝트 이름 또는 상태 변경
     @Operation(summary = "프로젝트 업데이트", description = "프로젝트의 이름이나 상태를 변경합니다.")
     @ApiResponses(value = {

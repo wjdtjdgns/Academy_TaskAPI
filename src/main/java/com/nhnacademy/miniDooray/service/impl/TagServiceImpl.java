@@ -3,11 +3,15 @@ package com.nhnacademy.miniDooray.service.impl;
 import com.nhnacademy.miniDooray.dto.TagDto;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.Tag;
+import com.nhnacademy.miniDooray.entity.Task;
+import com.nhnacademy.miniDooray.entity.TaskTag;
 import com.nhnacademy.miniDooray.exception.ProjectNotFoundException;
 import com.nhnacademy.miniDooray.exception.TagNameAlreadyExistsException;
 import com.nhnacademy.miniDooray.exception.TagNotFoundException;
 import com.nhnacademy.miniDooray.repository.ProjectRepository;
 import com.nhnacademy.miniDooray.repository.TagRepository;
+import com.nhnacademy.miniDooray.repository.TaskRepository;
+import com.nhnacademy.miniDooray.repository.TaskTagRepository;
 import com.nhnacademy.miniDooray.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+    private final TaskTagRepository taskTagRepository;
 
     @Override
     public TagDto addTagToProject(String userId, Long projectId, TagDto tagDto) {
@@ -38,8 +44,17 @@ public class TagServiceImpl implements TagService {
         Tag tag = new Tag();
         tag.setName(tagDto.getName());
         tag.setProject(project);
-
         tagRepository.save(tag);
+
+        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
+        for(Task task : tasks){
+            TaskTag taskTag = new TaskTag();
+            taskTag.setTask(task);
+            taskTag.setTag(tag);
+            taskTag.setSelected(false);
+            taskTagRepository.save(taskTag);
+        }
+
         return convertToDto(tag);
     }
 

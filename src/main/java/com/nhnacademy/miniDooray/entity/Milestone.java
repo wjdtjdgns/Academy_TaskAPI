@@ -26,9 +26,7 @@ public class Milestone {
     @Length(min = 1, max = 50)
     private String title;
 
-    @NotNull
     private ZonedDateTime startDate;
 
-    @NotNull
     private ZonedDateTime endDate;
 }

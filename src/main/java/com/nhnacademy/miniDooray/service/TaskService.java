@@ -1,15 +1,12 @@
 package com.nhnacademy.miniDooray.service;
 
-import com.nhnacademy.miniDooray.dto.MilestoneDto;
-import com.nhnacademy.miniDooray.dto.TagDto;
-import com.nhnacademy.miniDooray.dto.TaskDto;
-import com.nhnacademy.miniDooray.dto.TaskTagDto;
+import com.nhnacademy.miniDooray.dto.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface TaskService {
-    TaskDto registerTask(TaskDto taskDto);
+    TaskDto registerTask(String userId, Long projectId, TaskRegisterDto taskDto);
     TaskDto updateTask(Long taskId, TaskDto taskDto);
     void deleteTask(Long taskId);
     Page<TaskDto> getTasks(int page, int size);

@@ -1,18 +1,10 @@
 package com.nhnacademy.miniDooray.service.impl;
 
-import com.nhnacademy.miniDooray.dto.MilestoneDto;
-import com.nhnacademy.miniDooray.dto.TagDto;
-import com.nhnacademy.miniDooray.dto.TaskDto;
-import com.nhnacademy.miniDooray.dto.TaskTagDto;
-import com.nhnacademy.miniDooray.entity.Milestone;
-import com.nhnacademy.miniDooray.entity.Tag;
-import com.nhnacademy.miniDooray.entity.Task;
-import com.nhnacademy.miniDooray.entity.TaskTag;
+import com.nhnacademy.miniDooray.dto.*;
+import com.nhnacademy.miniDooray.entity.*;
 import com.nhnacademy.miniDooray.exception.IdAlreadyExistsException;
 import com.nhnacademy.miniDooray.exception.IdNotFoundException;
-import com.nhnacademy.miniDooray.repository.MilestoneRepository;
-import com.nhnacademy.miniDooray.repository.TaskRepository;
-import com.nhnacademy.miniDooray.repository.TaskTagRepository;
+import com.nhnacademy.miniDooray.repository.*;
 import com.nhnacademy.miniDooray.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,26 +21,37 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final MilestoneRepository milestoneRepository;
     private final TaskTagRepository taskTagRepository;
+    private final ProjectRepository projectRepository;
+    private final TagRepository tagRepository;
 
     @Override
-    public TaskDto registerTask(TaskDto taskDto) {
-        if (taskDto == null) {
-            throw new IllegalArgumentException("TaskDto cannot be null");
+    public TaskDto registerTask(String userId ,Long projectId, TaskRegisterDto taskDto) {
+        if(userId == null){
+            throw new IdNotFoundException("존재하지 않는 아이디입니다.");
         }
 
-        if (taskRepository.existsById(taskDto.getId())) {
-            throw new IdAlreadyExistsException("Task id가 이미 존재합니다. " + taskDto.getId());
-        }
+        Task task = new Task();
+        task.setTitle(taskDto.getTitle());
+        task.setContent(taskDto.getContent());
 
-        Task task = new Task(
-                taskDto.getId(),
-                taskDto.getMilestone(),
-                taskDto.getProject(),
-                taskDto.getTitle(),
-                taskDto.getContent()
-        );
+        Milestone milestone =milestoneRepository.findById(taskDto.getMilestoneId())
+                .orElseThrow(() -> new IdNotFoundException("마일스톤 id를 찾을 수 없습니다."));
+        task.setMilestone(milestone);
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IdNotFoundException("존재하지 않는 프로젝트 아이디입니다."));
+        task.setProject(project);
 
         taskRepository.save(task);
+
+        List<Tag> tags = tagRepository.findByProjectId(projectId);
+        for (Tag tag : tags) {
+            TaskTag taskTag = new TaskTag();
+            taskTag.setTag(tag);
+            taskTag.setTask(task);
+            taskTag.setSelected(false);
+            taskTagRepository.save(taskTag);
+        }
 
         return convertToDto(task);
     }
