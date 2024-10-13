@@ -2,8 +2,10 @@ package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.ProjectDto;
 import com.nhnacademy.miniDooray.dto.ProjectRegisterDto;
+import com.nhnacademy.miniDooray.dto.ProjectUpdateDto;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.ProjectMember;
+import com.nhnacademy.miniDooray.entity.Status;
 import com.nhnacademy.miniDooray.exception.ProjectNameAlreadyExistsException;
 import com.nhnacademy.miniDooray.exception.ProjectNotFoundException;
 import com.nhnacademy.miniDooray.repository.ProjectMemberRepository;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +55,27 @@ class ProjectServiceImplTest {
     @Test
     void createProject_success() {
         ProjectRegisterDto projectDto = new ProjectRegisterDto("New Project");
-        when(projectRepository.existsByName("New Project")).thenReturn(false);
-        when(projectRepository.save(any())).thenReturn(new Project());
 
+        when(projectRepository.existsByName("New Project")).thenReturn(false);
+
+        Project mockProject = new Project();
+        mockProject.setId(1L);
+        mockProject.setAdminId("admin1");
+        mockProject.setName("New Project");
+        mockProject.setStatus(Status.ACTIVATED);
+
+        when(projectRepository.save(any(Project.class))).thenReturn(mockProject);
+        when(projectMemberRepository.save(any())).thenReturn(new ProjectMember());
+
+        // 실제 createProject 호출
         ProjectDto result = projectService.createProject("admin1", projectDto);
 
+        // 결과 확인
         assertNotNull(result);
+        assertEquals("New Project", result.getName());
+        assertEquals("admin1", result.getAdminId());
+
+        verify(projectMemberRepository).save(any(ProjectMember.class));
     }
 
     @Test
@@ -68,26 +86,31 @@ class ProjectServiceImplTest {
         assertThrows(ProjectNameAlreadyExistsException.class, () -> projectService.createProject("admin1", projectDto));
     }
 
+
     @Test
     void updateProject_success() {
         Project project = new Project();
         project.setId(1L);
-        ProjectDto projectDto = new ProjectDto(1L, "admin1", "Updated Project", null, null);
+
+        ProjectUpdateDto projectUpdateDto = new ProjectUpdateDto("Updated Project", Status.CLOSED);
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
         when(projectRepository.save(any(Project.class))).thenReturn(project);
 
-        ProjectDto result = projectService.updateProject("user1", 1L, projectDto);
+        ProjectDto result = projectService.updateProject("user1", 1L, projectUpdateDto);
 
         assertEquals("Updated Project", result.getName());
+        assertEquals(Status.CLOSED, result.getStatus());
     }
+
 
     @Test
     void updateProject_projectNotFound() {
-        ProjectDto projectDto = new ProjectDto(1L, "admin1", "Non-existing Project", null, null);
+        ProjectUpdateDto projectUpdateDto = new ProjectUpdateDto("Non-existing Project", Status.CLOSED);
+
         when(projectRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(ProjectNotFoundException.class, () -> projectService.updateProject("user1", 1L, projectDto));
+        assertThrows(ProjectNotFoundException.class, () -> projectService.updateProject("user1", 1L, projectUpdateDto));
     }
 
     @Test
@@ -108,12 +131,13 @@ class ProjectServiceImplTest {
 
     @Test
     void updateProject_nullParameters() {
-        ProjectDto projectDto = new ProjectDto(1L, "admin1", "Updated Project", null, null);
+        ProjectUpdateDto projectUpdateDto = new ProjectUpdateDto("Updated Project", Status.CLOSED);
 
-        assertThrows(IllegalArgumentException.class, () -> projectService.updateProject(null, 1L, projectDto));
-        assertThrows(IllegalArgumentException.class, () -> projectService.updateProject("user1", null, projectDto));
+        assertThrows(IllegalArgumentException.class, () -> projectService.updateProject(null, 1L, projectUpdateDto));
+        assertThrows(IllegalArgumentException.class, () -> projectService.updateProject("user1", null, projectUpdateDto));
         assertThrows(IllegalArgumentException.class, () -> projectService.updateProject("user1", 1L, null));
     }
+
 
     @Test
     void addMembersToProject_nullParameters() {

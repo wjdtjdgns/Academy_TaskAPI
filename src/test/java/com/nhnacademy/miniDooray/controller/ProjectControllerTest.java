@@ -121,7 +121,9 @@ class ProjectControllerTest {
     @DisplayName("PUT - /projects/{projectId} (프로젝트 이름 또는 상태 변경)")
     void testUpdateProject() throws Exception {
         ProjectDto updatedProjectDto = new ProjectDto(1L, "adminId", "UpdatedName", Status.CLOSED, List.of());
-        when(projectService.updateProject(anyString(), anyLong(), any(ProjectDto.class))).thenReturn(updatedProjectDto);
+
+        when(projectService.updateProject(anyString(), anyLong(), any(ProjectUpdateDto.class)))
+                .thenReturn(updatedProjectDto);
 
         mockMvc.perform(put("/projects/1")
                         .header("X-USER-ID", "userId")
