@@ -1,6 +1,7 @@
 package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.MilestoneDto;
+import com.nhnacademy.miniDooray.dto.MilestoneRegisterDto;
 import com.nhnacademy.miniDooray.entity.Milestone;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.exception.MilestoneNotFoundException;
@@ -23,7 +24,7 @@ public class MilestoneServiceImpl implements MilestoneService {
     private final ProjectRepository projectRepository;
 
     @Override
-    public MilestoneDto addMilestoneToProject(String userId, Long projectId, MilestoneDto milestoneDto) {
+    public MilestoneDto addMilestoneToProject(String userId, Long projectId, MilestoneRegisterDto milestoneDto) {
         if (userId == null || projectId == null || milestoneDto == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }

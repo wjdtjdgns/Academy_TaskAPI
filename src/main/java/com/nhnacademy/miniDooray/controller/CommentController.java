@@ -1,6 +1,7 @@
 package com.nhnacademy.miniDooray.controller;
 
 import com.nhnacademy.miniDooray.dto.CommentDto;
+import com.nhnacademy.miniDooray.dto.CommentRegisterDto;
 import com.nhnacademy.miniDooray.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,8 +29,11 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "해당 프로젝트 또는 Task ID를 찾을 수 없음")
     })
     @PostMapping
-    public ResponseEntity<CommentDto> registerComment(@PathVariable Long projectId, @PathVariable Long taskId, @Validated @RequestBody CommentDto commentDto) {
-        CommentDto registerDto = commentService.registerComment(projectId, taskId, commentDto);
+    public ResponseEntity<CommentDto> registerComment(@RequestHeader("X-USER-ID") String userId,
+                                                      @PathVariable Long projectId,
+                                                      @PathVariable Long taskId,
+                                                      @Validated @RequestBody CommentRegisterDto commentDto) {
+        CommentDto registerDto = commentService.registerComment(userId, projectId, taskId, commentDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(registerDto);
     }
 

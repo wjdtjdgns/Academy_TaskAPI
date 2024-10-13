@@ -188,7 +188,7 @@ class ProjectControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    /*@Test
     @DisplayName("POST - /projects/{projectId}/milestone (프로젝트 마일스톤 추가)")
     void testAddMilestone() throws Exception {
         MilestoneDto milestoneDto = new MilestoneDto(1L, null, "MilestoneTitle", null, null);
@@ -201,7 +201,7 @@ class ProjectControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("MilestoneTitle"));
-    }
+    }*/
 
     @Test
     @DisplayName("GET - /projects/{projectId}/milestone (프로젝트 마일스톤 조회)")

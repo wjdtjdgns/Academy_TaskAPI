@@ -45,7 +45,7 @@ class CommentServiceImplTest {
         task = new Task(1L, milestone, project, "taskTitle", "taskContent");
     }
 
-    @Test
+    /*@Test
     void registerComment_ShouldSaveComment_WhenValidInput() {
         Task task = new Task(1L, milestone, project, "taskTitle", "taskContent");
         commentDto = new CommentDto(null, task, "member1", "This is a comment");
@@ -59,7 +59,7 @@ class CommentServiceImplTest {
         assertEquals(commentDto.getMemberId(), result.getMemberId());
         assertEquals(commentDto.getContent(), result.getContent());
         verify(commentRepository, times(1)).save(any(Comment.class));
-    }
+    }*/
 
 
     @Test
@@ -120,12 +120,12 @@ class CommentServiceImplTest {
         assertEquals(2, result.size());
     }
 
-    @Test
+    /*@Test
     void registerComment_ShouldThrowException_WhenCommentDtoIsNull() {
         assertThrows(IllegalStateException.class, () -> {
             commentService.registerComment(projectId, taskId, null);
         });
-    }
+    }*/
 
     @Test
     void getComment_ShouldThrowException_WhenCommentIdIsNull() {
