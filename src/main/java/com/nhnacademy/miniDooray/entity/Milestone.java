@@ -2,20 +2,19 @@ package com.nhnacademy.miniDooray.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
+@Setter
 @Getter
+@Table(name = "milestone")
 public class Milestone {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,8 +28,8 @@ public class Milestone {
     private String title;
 
     @NotNull
-    private ZonedDateTime start;
+    private ZonedDateTime startDate;
 
     @NotNull
-    private ZonedDateTime end;
+    private ZonedDateTime endDate;
 }

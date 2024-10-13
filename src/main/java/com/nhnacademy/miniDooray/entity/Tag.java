@@ -6,9 +6,10 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Tag {
 
     @Id

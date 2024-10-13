@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class Comment {
@@ -21,7 +21,7 @@ public class Comment {
     @NotNull
     @Length(min = 1, max = 20)
     @Setter
-    private String member_id;
+    private String memberId;
 
     @NotNull
     @Length(min = 1, max = 255)
