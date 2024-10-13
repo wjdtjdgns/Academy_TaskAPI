@@ -6,6 +6,8 @@ import com.nhnacademy.miniDooray.dto.TaskDto;
 import com.nhnacademy.miniDooray.dto.TaskTagDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface TaskService {
     TaskDto registerTask(TaskDto taskDto);
     TaskDto updateTask(Long taskId, TaskDto taskDto);
@@ -14,4 +16,5 @@ public interface TaskService {
     TaskDto getTask(Long taskId);
     TaskDto updateMilestone(Long taskId, Long milestoneId, MilestoneDto milestoneDto);
     TaskTagDto updateTag(Long taskTagId, TaskDto taskDto, TagDto tagDto);
+    List<TaskDto> getTasksByProjectId(Long projectId);
 }

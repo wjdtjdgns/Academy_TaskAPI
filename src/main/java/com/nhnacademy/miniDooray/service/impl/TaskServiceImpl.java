@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -180,6 +182,16 @@ public class TaskServiceImpl implements TaskService {
         taskTagRepository.save(taskTag);
 
         return convertToDto(taskTag);
+    }
+
+    @Override
+    public List<TaskDto> getTasksByProjectId(Long projectId) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
+
+        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
+        return tasks.stream().map(this::convertToDto).toList();
     }
 
     private TaskDto convertToDto(Task task) {
