@@ -1,6 +1,7 @@
 package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.ProjectDto;
+import com.nhnacademy.miniDooray.dto.ProjectRegisterDto;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.ProjectMember;
 import com.nhnacademy.miniDooray.exception.ProjectNameAlreadyExistsException;
@@ -50,8 +51,7 @@ class ProjectServiceImplTest {
 
     @Test
     void createProject_success() {
-        ProjectDto projectDto = new ProjectDto(null, "admin1", "New Project", null, null);
-
+        ProjectRegisterDto projectDto = new ProjectRegisterDto("New Project");
         when(projectRepository.existsByName("New Project")).thenReturn(false);
         when(projectRepository.save(any())).thenReturn(new Project());
 
@@ -62,7 +62,7 @@ class ProjectServiceImplTest {
 
     @Test
     void createProject_projectNameExists() {
-        ProjectDto projectDto = new ProjectDto(null, "admin1", "Existing Project", null, null);
+        ProjectRegisterDto projectDto = new ProjectRegisterDto("Existing Project");
         when(projectRepository.existsByName("Existing Project")).thenReturn(true);
 
         assertThrows(ProjectNameAlreadyExistsException.class, () -> projectService.createProject("admin1", projectDto));
@@ -100,7 +100,7 @@ class ProjectServiceImplTest {
 
     @Test
     void createProject_nullParameters() {
-        ProjectDto projectDto = new ProjectDto(null, "admin1", "New Project", null, null);
+        ProjectRegisterDto projectDto = new ProjectRegisterDto("New Project");
 
         assertThrows(IllegalArgumentException.class, () -> projectService.createProject(null, projectDto));
         assertThrows(IllegalArgumentException.class, () -> projectService.createProject("admin1", null));

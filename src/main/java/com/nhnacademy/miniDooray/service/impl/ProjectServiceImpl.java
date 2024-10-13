@@ -1,8 +1,10 @@
 package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.ProjectDto;
+import com.nhnacademy.miniDooray.dto.ProjectRegisterDto;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.ProjectMember;
+import com.nhnacademy.miniDooray.entity.Status;
 import com.nhnacademy.miniDooray.exception.ProjectNameAlreadyExistsException;
 import com.nhnacademy.miniDooray.exception.ProjectNotFoundException;
 import com.nhnacademy.miniDooray.repository.ProjectMemberRepository;
@@ -49,7 +51,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto createProject(String adminId, ProjectDto projectDto) {
+    public ProjectDto createProject(String adminId, ProjectRegisterDto projectDto) {
         if (adminId == null || projectDto == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
@@ -61,7 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = new Project();
         project.setAdminId(adminId);
         project.setName(projectDto.getName());
-        project.setStatus(projectDto.getStatus());
+        project.setStatus(Status.ACTIVATED);
         projectRepository.save(project);
         return convertToDto(project);
     }
