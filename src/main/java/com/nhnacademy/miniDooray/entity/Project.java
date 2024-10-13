@@ -5,9 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
+@Setter
 @Getter
 public class Project {
 
@@ -18,7 +21,7 @@ public class Project {
     @NotNull
     @Length(min = 1, max = 20)
     @Setter
-    private String admin_id;
+    private String adminId;
 
     @NotNull
     @Length(min = 1, max = 20)
@@ -29,4 +32,5 @@ public class Project {
     @Enumerated(EnumType.STRING)
     @Setter
     private Status status;
+
 }
