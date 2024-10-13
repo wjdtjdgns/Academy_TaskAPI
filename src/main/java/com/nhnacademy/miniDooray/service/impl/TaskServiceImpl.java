@@ -1,8 +1,11 @@
 package com.nhnacademy.miniDooray.service.impl;
 
+import com.nhnacademy.miniDooray.dto.MilestoneDto;
+import com.nhnacademy.miniDooray.dto.TagDto;
 import com.nhnacademy.miniDooray.dto.TaskDto;
 import com.nhnacademy.miniDooray.dto.TaskTagDto;
 import com.nhnacademy.miniDooray.entity.Milestone;
+import com.nhnacademy.miniDooray.entity.Tag;
 import com.nhnacademy.miniDooray.entity.Task;
 import com.nhnacademy.miniDooray.entity.TaskTag;
 import com.nhnacademy.miniDooray.exception.IdAlreadyExistsException;
@@ -115,7 +118,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto updateMilestone(Long taskId, Long milestoneId) {
+    public TaskDto updateMilestone(Long taskId, Long milestoneId, MilestoneDto milestoneDto) {
         if (taskId == null) {
             throw new IllegalArgumentException();
         }
@@ -127,8 +130,16 @@ public class TaskServiceImpl implements TaskService {
             throw new IllegalArgumentException();
         }
 
-        Milestone milestone = milestoneRepository.findById(milestoneId)
+        milestoneRepository.findById(milestoneId)
                 .orElseThrow(() -> new IdNotFoundException("해당 ID가 없습니다."));
+
+        Milestone milestone = new Milestone(
+                milestoneId,
+                milestoneDto.getProject(),
+                milestoneDto.getTitle(),
+                milestoneDto.getStartDate(),
+                milestoneDto.getEndDate()
+        );
 
         task.setMilestone(milestone);
 
@@ -138,7 +149,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskTagDto updateTag(Long taskTagId) {
+    public TaskTagDto updateTag(Long taskTagId, TaskDto taskDto, TagDto tagDto) {
         if (taskTagId == null) {
             throw new IllegalArgumentException();
         }
@@ -146,7 +157,22 @@ public class TaskServiceImpl implements TaskService {
         TaskTag taskTag = taskTagRepository.findById(taskTagId)
                 .orElseThrow(() -> new IdNotFoundException("해당 ID가 없습니다."));
 
-        taskTag.setSelected(!taskTag.isSelected());
+        Tag tag = new Tag(
+                tagDto.getId(),
+                tagDto.getProject(),
+                tagDto.getName()
+        );
+
+        Task task = new Task(
+                taskDto.getId(),
+                taskDto.getMilestone(),
+                taskDto.getProject(),
+                taskDto.getTitle(),
+                taskDto.getContent()
+        );
+
+        taskTag.setTag(tag);
+        taskTag.setTask(task);
 
         taskTagRepository.save(taskTag);
 

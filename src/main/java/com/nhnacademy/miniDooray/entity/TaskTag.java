@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class TaskTag {
 
     @Id
@@ -23,6 +24,5 @@ public class TaskTag {
     private Task task;
 
     @NotNull
-    @Setter
     private boolean isSelected = false;
 }
