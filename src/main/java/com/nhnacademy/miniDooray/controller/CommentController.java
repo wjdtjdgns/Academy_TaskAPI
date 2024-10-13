@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,9 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "해당 프로젝트 또는 Task ID를 찾을 수 없음")
     })
     @PostMapping
-    public ResponseEntity<CommentDto> registerComment(@PathVariable Long projectId, @PathVariable Long taskId, @Validated @RequestBody CommentDto commentDto){
+    public ResponseEntity<CommentDto> registerComment(@PathVariable Long projectId, @PathVariable Long taskId, @Validated @RequestBody CommentDto commentDto) {
         CommentDto registerDto = commentService.registerComment(projectId, taskId, commentDto);
-        return ResponseEntity.ok(registerDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registerDto);
     }
 
     @Operation(summary = "Get a comment by ID", description = "특정 댓글의 정보를 조회합니다.")
