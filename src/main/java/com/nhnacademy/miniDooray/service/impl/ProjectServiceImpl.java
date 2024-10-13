@@ -123,4 +123,3 @@ public class ProjectServiceImpl implements ProjectService {
         return convertToDto(project);
     }
 }
-
