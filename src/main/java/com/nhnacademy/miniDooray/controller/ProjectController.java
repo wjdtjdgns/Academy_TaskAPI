@@ -102,6 +102,7 @@ public class ProjectController {
     @Operation(summary = "프로젝트 업데이트", description = "프로젝트의 이름이나 상태를 변경합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "프로젝트 업데이트 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 - 유효성 검사 실패"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
             @ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음")
     })
@@ -109,7 +110,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> updateProject(
             @RequestHeader("X-USER-ID") String userId,
             @PathVariable Long projectId,
-            @RequestBody ProjectDto updatedProject) {
+            @Valid @RequestBody ProjectUpdateDto updatedProject) {
         ProjectDto project = projectService.updateProject(userId, projectId, updatedProject);
         return ResponseEntity.ok(project);
     }

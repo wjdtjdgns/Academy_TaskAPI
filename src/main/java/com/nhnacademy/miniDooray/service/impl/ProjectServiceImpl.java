@@ -2,6 +2,7 @@ package com.nhnacademy.miniDooray.service.impl;
 
 import com.nhnacademy.miniDooray.dto.ProjectDto;
 import com.nhnacademy.miniDooray.dto.ProjectRegisterDto;
+import com.nhnacademy.miniDooray.dto.ProjectUpdateDto;
 import com.nhnacademy.miniDooray.entity.Project;
 import com.nhnacademy.miniDooray.entity.ProjectMember;
 import com.nhnacademy.miniDooray.entity.Status;
@@ -10,12 +11,14 @@ import com.nhnacademy.miniDooray.exception.ProjectNotFoundException;
 import com.nhnacademy.miniDooray.repository.ProjectMemberRepository;
 import com.nhnacademy.miniDooray.repository.ProjectRepository;
 import com.nhnacademy.miniDooray.service.ProjectService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,12 +67,19 @@ public class ProjectServiceImpl implements ProjectService {
         project.setAdminId(adminId);
         project.setName(projectDto.getName());
         project.setStatus(Status.ACTIVATED);
-        projectRepository.save(project);
+        project = projectRepository.save(project);
+
+        ProjectMember member = new ProjectMember();
+        member.setMemberId(adminId);
+        member.setProject(project);
+
+        projectMemberRepository.save(member);
+
         return convertToDto(project);
     }
 
     @Override
-    public ProjectDto updateProject(String userId, Long projectId, ProjectDto projectDto) {
+    public ProjectDto updateProject(String userId, Long projectId, ProjectUpdateDto projectDto) {
         if (userId == null || projectId == null || projectDto == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
         }
