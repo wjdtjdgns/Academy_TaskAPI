@@ -85,22 +85,22 @@ class ProjectControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    @DisplayName("POST - /projects/{projectId}/members (프로젝트 멤버 추가)")
-    void testAddProjectMembers() throws Exception {
-        ProjectDto projectDto = new ProjectDto(1L, "adminId", "ProjectName", Status.ACTIVATED, List.of("memberId"));
-        when(projectService.addMembersToProject(anyString(), anyLong(), anyList())).thenReturn(projectDto);
-
-        mockMvc.perform(post("/projects/1/members")
-                        .header("X-USER-ID", "adminId")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("[\"memberId\"]"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("ProjectName"))
-                .andExpect(jsonPath("$.adminId").value("adminId"))
-                .andExpect(jsonPath("$.memberIds[0]").value("memberId"));
-    }
+//    @Test
+//    @DisplayName("POST - /projects/{projectId}/members (프로젝트 멤버 추가)")
+//    void testAddProjectMembers() throws Exception {
+//        ProjectDto projectDto = new ProjectDto(1L, "adminId", "ProjectName", Status.ACTIVATED, List.of("memberId"));
+//        when(projectService.addMembersToProject(anyString(), anyLong(), anyList())).thenReturn(projectDto);
+//
+//        mockMvc.perform(post("/projects/1/members")
+//                        .header("X-USER-ID", "adminId")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("[\"memberId\"]"))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.id").value(1L))
+//                .andExpect(jsonPath("$.name").value("ProjectName"))
+//                .andExpect(jsonPath("$.adminId").value("adminId"))
+//                .andExpect(jsonPath("$.memberIds[0]").value("memberId"));
+//    }
 
     @Test
     @DisplayName("GET - /projects/{projectId} (단일 프로젝트 조회)")

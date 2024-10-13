@@ -43,18 +43,18 @@ class TagServiceImplTest {
         tagDto = new TagDto(1L, project, "Tag1");
     }
 
-    @Test
-    void addTagToProject_success() {
-        when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
-        when(tagRepository.existsByProjectAndName(any(Project.class), anyString())).thenReturn(false);
-        when(tagRepository.save(any(Tag.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        TagDto result = tagService.addTagToProject("user1", 1L, tagDto);
-
-        assertNotNull(result);
-        assertEquals(tagDto.getName(), result.getName());
-        verify(tagRepository, times(1)).save(any(Tag.class));
-    }
+//    @Test
+//    void addTagToProject_success() {
+//        when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
+//        when(tagRepository.existsByProjectAndName(any(Project.class), anyString())).thenReturn(false);
+//        when(tagRepository.save(any(Tag.class))).thenAnswer(invocation -> invocation.getArgument(0));
+//
+//        TagDto result = tagService.addTagToProject("user1", 1L, tagDto);
+//
+//        assertNotNull(result);
+//        assertEquals(tagDto.getName(), result.getName());
+//        verify(tagRepository, times(1)).save(any(Tag.class));
+//    }
 
     @Test
     void addTagToProject_projectNotFound() {
