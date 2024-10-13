@@ -1,6 +1,7 @@
 package com.nhnacademy.miniDooray.controller;
 
 import com.nhnacademy.miniDooray.dto.*;
+import com.nhnacademy.miniDooray.entity.TaskTag;
 import com.nhnacademy.miniDooray.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -162,10 +163,20 @@ public class TaskController {
     })
     @PostMapping("/{taskId}")
     public ResponseEntity<List<TaskTagResponse>> registerTag(@RequestHeader("X-USER-ID") String userId,
-                                        @PathVariable Long projectId,
-                                        @PathVariable Long taskId,
-                                        @RequestBody TaskTagRequest taskTagRequest) {
+                                                             @PathVariable Long projectId,
+                                                             @PathVariable Long taskId,
+                                                             @RequestBody TaskTagRequest taskTagRequest) {
         List<TaskTagResponse> responseList = taskService.registerTags(userId, projectId, taskId, taskTagRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseList);
+    }
+
+    @GetMapping("/{taskId}/tag")
+    public ResponseEntity<List<TaskTag>> getTagsByTaskId(@RequestHeader("X-USER-ID") String userId,
+                                                         @PathVariable Long projectId,
+                                                         @PathVariable Long taskId
+    ) {
+        List<TaskTag> responseList = taskService.getTagByTaskId(taskId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
 }

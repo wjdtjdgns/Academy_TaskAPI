@@ -219,6 +219,12 @@ public class TaskServiceImpl implements TaskService {
         return responseList;
     }
 
+    @Override
+    public List<TaskTag> getTagByTaskId(Long taskId) {
+        List<TaskTag> allByTaskId = taskTagRepository.findAllByTaskId(taskId);
+        return allByTaskId;
+    }
+
     private TaskDto convertToDto(Task task) {
         return new TaskDto(
                 task.getId(),

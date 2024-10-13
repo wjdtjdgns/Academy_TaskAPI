@@ -1,6 +1,7 @@
 package com.nhnacademy.miniDooray.service;
 
 import com.nhnacademy.miniDooray.dto.*;
+import com.nhnacademy.miniDooray.entity.TaskTag;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface TaskService {
     TaskTagDto updateTag(Long taskTagId, TaskDto taskDto, TagDto tagDto);
     List<TaskDto> getTasksByProjectId(Long projectId);
     List<TaskTagResponse> registerTags(String userId, Long projectId, Long taskId, TaskTagRequest taskTagRequest);
+    List<TaskTag> getTagByTaskId(Long taskId);
 }
