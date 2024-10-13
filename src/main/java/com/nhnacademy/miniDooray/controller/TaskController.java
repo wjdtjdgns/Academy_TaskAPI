@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/projects/{projectId}/tasks")
 @RequiredArgsConstructor
 @RestController
@@ -71,6 +73,22 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+//    @Operation(summary = "프로젝트 내 태스크 전체 조회")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Tasks retrieved"),
+//            @ApiResponse(responseCode = "400", description = "Invalid pagination parameters"),
+//            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+//            @ApiResponse(responseCode = "403", description = "Forbidden"),
+//            @ApiResponse(responseCode = "404", description = "Project not found")
+//    })
+//    @GetMapping
+//    public ResponseEntity<Page<TaskDto>> getTasks(
+//            @RequestHeader("X-USER-ID") String userId,
+//            Pageable pageable) {
+//        Page<TaskDto> taskDtoList = taskService.getTasks(pageable.getPageNumber(), pageable.getPageSize());
+//        return ResponseEntity.ok(taskDtoList);
+//    }
+
     @Operation(summary = "프로젝트 내 태스크 전체 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Tasks retrieved"),
@@ -80,11 +98,10 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "Project not found")
     })
     @GetMapping
-    public ResponseEntity<Page<TaskDto>> getTasks(
-            @RequestHeader("X-USER-ID") String userId,
-            Pageable pageable) {
-        Page<TaskDto> taskDtoList = taskService.getTasks(pageable.getPageNumber(), pageable.getPageSize());
-        return ResponseEntity.ok(taskDtoList);
+    public ResponseEntity<List<TaskDto>> getTasksByProjectId(@PathVariable Long projectId) {
+        List<TaskDto> taskDtoList = taskService.getTasksByProjectId(projectId);
+
+        return ResponseEntity.ok().body(taskDtoList);
     }
 
     @Operation(summary = "프로젝트 내 태스크 단일 조회")
